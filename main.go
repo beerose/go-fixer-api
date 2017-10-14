@@ -1,10 +1,15 @@
 package main
 
 import (
-	"api/utils"
-	"fmt"
+	"api/convert"
+	"log"
+	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
-	fmt.Println("aaaa", utils.Round(3.66666666666))
+	router := mux.NewRouter().StrictSlash(true)
+	router.HandleFunc("/convert", convert.Convert)
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
