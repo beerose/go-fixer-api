@@ -7,19 +7,20 @@ import (
 	"net/http"
 )
 
-func getLatestRates(currency string) (bool, *fixerResponse) {
+// GetLatestRates gets latest exchange rates from fixer.io
+func GetLatestRates(currency string) (bool, *Response) {
 	res, err := http.Get("http://api.fixer.io/latest?base=" + currency)
 	if res.StatusCode != 200 || err != nil {
 		return false, nil
 	}
 	body, err := ioutil.ReadAll(res.Body)
-	s, err := createFixerResponse([]byte(body))
+	s, err := createResponse([]byte(body))
 
 	return true, s
 }
 
-func createFixerResponse(body []byte) (*fixerResponse, error) {
-	s := new(fixerResponse)
+func createResponse(body []byte) (*Response, error) {
+	s := new(Response)
 	err := json.Unmarshal(body, &s)
 	if err != nil {
 		fmt.Println("createFixerResponed failed. Coudn't unmarshal body.", err)
@@ -27,7 +28,8 @@ func createFixerResponse(body []byte) (*fixerResponse, error) {
 	return s, err
 }
 
-type fixerResponse struct {
+// Response represents response delivered by fixer.io
+type Response struct {
 	Base  string             `json:"base"`
 	Date  string             `json:"date"`
 	Rates map[string]float64 `json:"rates"`

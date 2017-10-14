@@ -1,6 +1,7 @@
 package convert
 
 import (
+	"encoding/json"
 	"net/url"
 	"reflect"
 	"testing"
@@ -42,6 +43,29 @@ func Test_unpackQuery(t *testing.T) {
 			}
 			if !reflect.DeepEqual(got1, tt.want1) {
 				t.Errorf("unpackQuery() got1 = %v, want %v", got1, tt.want1)
+			}
+		})
+	}
+}
+
+func Test_createErrorResponse(t *testing.T) {
+	properErrorMessage, _ := json.Marshal(&errorResponse{[]string{"Some error message."}})
+	type args struct {
+		params []string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []byte
+	}{
+		{"Should return proper json error message",
+			args{[]string{"Some error message."}},
+			properErrorMessage},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := createErrorResponse(tt.args.params); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("createErrorResponse() = %v, want %v", got, tt.want)
 			}
 		})
 	}
