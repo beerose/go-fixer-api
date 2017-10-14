@@ -56,7 +56,7 @@ func Test_multiply(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := multiply(tt.args.rates, tt.args.amount); !reflect.DeepEqual(got, tt.want) {
+			if got := tt.args.rates.multiply(tt.args.amount); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("multiply() = %v, want %v", got, tt.want)
 			}
 		})

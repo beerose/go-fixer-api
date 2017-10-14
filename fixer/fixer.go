@@ -1,6 +1,7 @@
 package fixer
 
 import (
+	"api/currency"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -30,7 +31,7 @@ func createResponse(body []byte) (*Response, error) {
 
 // Response represents response delivered by fixer.io
 type Response struct {
-	Base  string             `json:"base"`
-	Date  string             `json:"date"`
-	Rates map[string]float64 `json:"rates"`
+	Base  string         `json:"base"`
+	Date  string         `json:"date"`
+	Rates currency.Rates `json:"rates"`
 }

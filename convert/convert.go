@@ -1,6 +1,7 @@
 package convert
 
 import (
+	"api/currency"
 	"api/fixer"
 	"encoding/json"
 	"net/http"
@@ -15,16 +16,23 @@ func Convert(w http.ResponseWriter, r *http.Request) {
 	if !status {
 		sendErrorResponse(w, http.StatusBadRequest, params)
 	} else {
-		fixerStatus, latestRates := fixer.GetLatestRates(params[1])
+		amountString, currency := params[0], params[1]
+		fixerStatus, latestRates := fixer.GetLatestRates(currency)
 		if !fixerStatus {
 			sendErrorResponse(w, http.StatusFailedDependency,
 				[]string{"Cannot GET to fixer.io."})
 		} else {
-
+			amount, _ := strconv.ParseFloat(amountString, 64)
+			converted := latestRates.Rates.Multiply(amount)
+			sendValidResponse(w, amount, currency, &converted)
 		}
-
 	}
+}
 
+func sendValidResponse(w http.ResponseWriter, amount float64,
+	currency string, converted *currency.Rates) {
+	w.WriteHeader(http.StatusOK)
+	w.Write(createValidRespone(amount, currency, converted))
 }
 
 func sendErrorResponse(w http.ResponseWriter, status int, params []string) {
@@ -48,8 +56,19 @@ func unpackQuery(params url.Values) (bool, []string) {
 }
 
 func createErrorResponse(params []string) []byte {
-	errResponse := &errorResponse{params}
-	jsonResp, err := json.Marshal(errResponse)
+	errResp := &errorResponse{params}
+	jsonResp, err := json.Marshal(errResp)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return jsonResp
+}
+
+func createValidRespone(amount float64, currency string, converted *currency.Rates) []byte {
+	validResp := &validResponse{amount, currency, *converted}
+	jsonResp, err := json.Marshal(validResp)
 
 	if err != nil {
 		panic(err.Error())
@@ -59,9 +78,9 @@ func createErrorResponse(params []string) []byte {
 }
 
 type validResponse struct {
-	Amount    int                `json:"amount"`
-	Currency  string             `json:"currency"`
-	Converted map[string]float64 `json:"converted"`
+	Amount    float64        `json:"amount"`
+	Currency  string         `json:"currency"`
+	Converted currency.Rates `json:"converted"`
 }
 
 type errorResponse struct {
