@@ -5,16 +5,19 @@ Server returns respons in json or xml format depending on request header (eg. "A
 
 Usage example:
 * JSON:
-``` curl -i "https://fixerapi.appspot.com/convert?currency=PLN&amount=111"
+``` 
+curl -i "https://fixerapi.appspot.com/convert?currency=PLN&amount=111"
 ```
 * XML:
-``` curl -H "Accept: application/xml" -i "https://fixerapi.appspot.com/convert?currency=PLN&amount=111"
+``` 
+curl -H "Accept: application/xml" -i "https://fixerapi.appspot.com/convert?currency=PLN&amount=111"
 ```
 
 ### Google Cloud Server link: https://fixerapi.appspot.com/
 
 ### Testing
-``` go test fixerapi...
+``` 
+go test fixerapi...
 ```
 
 
