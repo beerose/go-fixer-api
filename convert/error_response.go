@@ -6,6 +6,7 @@ import (
 
 func sendErrorResponse(w http.ResponseWriter, status int, params []string, cType contentType) {
 	w.WriteHeader(status)
+	w.Header().Set("Content-type", string(cType))
 	w.Write(createErrorResponse(params, cType))
 }
 
