@@ -49,6 +49,25 @@ curl -H "Accept: application/xml" -i "https://fixerapi.appspot.com/convert?curre
         <ZAR value="412.25">
         ...
 ```
+### How to start server localy
+Requirements:
+
+* Go - https://golang.org/doc/install
+* Google Cloud SDK - https://cloud.google.com/appengine/docs/standard/python/download
+
+Further steps:
+* Clone this repository to some folder omiting $GOPATH
+```
+git clone git@github.com:blackdahila/go-fixer-api.git && cd go-fixer-api
+```
+* Execute:
+```
+dev_appserver.py app.yaml
+```
+
+
+
+
 
 ### Testing
 Tests can be run with command:
