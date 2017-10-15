@@ -18,7 +18,7 @@ func Test_getLatestRates(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := getLatestRates(tt.args.currency)
+			got, _ := GetLatestRates(tt.args.currency)
 			if got != tt.want {
 				t.Errorf("getLatestRates() got = %v, want %v", got, tt.want)
 			}

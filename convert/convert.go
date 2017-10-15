@@ -32,16 +32,39 @@ func Convert(w http.ResponseWriter, r *http.Request) {
 }
 
 func unpackQuery(params url.Values) (bool, []string) {
-	amount, amountPresent := params["amount"]
+	amountString, amountPresent := params["amount"]
 	currency, currencyPresent := params["currency"]
 
 	if !(amountPresent && currencyPresent) {
 		return false, []string{
 			"Is amount param correct: " +
 				strconv.FormatBool(amountPresent),
-			"Is currency param present: " +
+			"Is currency param correct: " +
 				strconv.FormatBool(currencyPresent)}
 	}
 
-	return true, []string{amount[0], currency[0]}
+	_, err := strconv.ParseFloat(amountString[0], 64)
+	isProperCurr := isProperCurrency(currency[0])
+
+	if err != nil || !isProperCurr {
+		return false, []string{
+			"Is amount param correct: " +
+				strconv.FormatBool(err != nil),
+			"Is currency param correct: " +
+				strconv.FormatBool(isProperCurr)}
+	}
+	return true, []string{amountString[0], currency[0]}
+}
+
+func isProperCurrency(currency string) bool {
+	currencies := []string{"AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "GBP", "HKD", "HRK",
+		"HUF", "IDR", "ILS", "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP",
+		"PLN", "RON", "RUB", "SEK", "SGD", "THB", "TRY", "USD", "ZAR", "EUR"}
+
+	for i := range currencies {
+		if currency == currencies[i] {
+			return true
+		}
+	}
+	return false
 }
