@@ -12,6 +12,6 @@ func init() {
 
 	http.HandleFunc("/convert", convert.Convert)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, r)
+		fmt.Fprintln(w, "Try use convert?amount={some_amount}&currency={some_currency} in url.")
 	})
 }
