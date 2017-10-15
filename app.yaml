@@ -1,16 +1,2 @@
 runtime: go
-api_version: go1
-
-handlers:
-
-- url: /.*
-  script: _go_app
-
-- url: /convert/.*
-  script: _go_app
-
-- url: /fixer/.*
-  script: _go_app
-
-- url: /currency/.*
-  script: _go_app
+env: flex
