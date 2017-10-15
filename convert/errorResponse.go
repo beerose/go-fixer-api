@@ -1,7 +1,6 @@
 package convert
 
 import (
-	"encoding/json"
 	"net/http"
 )
 
@@ -13,13 +12,13 @@ func sendErrorResponse(w http.ResponseWriter, status int, params []string, cType
 func createErrorResponse(params []string, cType contentType) []byte {
 	errResp := &errorResponse{params}
 
-	jsonResp, err := json.Marshal(errResp)
+	resp, err := cType.Marshal(errResp)
 
 	if err != nil {
 		panic(err.Error())
 	}
 
-	return jsonResp
+	return resp
 }
 
 type errorResponse struct {
