@@ -7,8 +7,8 @@ import (
 
 func sendValidResponse(w http.ResponseWriter, amount float64,
 	currency string, converted *currency.Rates, cType contentType) {
+	w.Header().Set("Content-Type", string(cType))
 	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-type", string(cType))
 	w.Write(createValidRespone(amount, currency, converted, cType))
 }
 
