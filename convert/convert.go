@@ -2,7 +2,6 @@ package convert
 
 import (
 	"fixerapi/fixer"
-	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -10,7 +9,6 @@ import (
 
 // Convert handles http request
 func Convert(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r)
 
 	status, params := unpackQuery(r.URL.Query())
 	cType := contentType(r.Header.Get("Accept"))
