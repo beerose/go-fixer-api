@@ -1,6 +1,4 @@
-application: fixer-api
-version: 2
-api_version: go1
+api_version: go1.8
 runtime: go
 env: standard
 threadsafe: false

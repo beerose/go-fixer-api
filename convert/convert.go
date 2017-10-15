@@ -2,6 +2,7 @@ package convert
 
 import (
 	"fixerapi/fixer"
+	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -9,6 +10,8 @@ import (
 
 // Convert handles http request
 func Convert(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r)
+
 	status, params := unpackQuery(r.URL.Query())
 	cType := contentType(r.Header.Get("Accept"))
 	if cType != ctXML {
@@ -19,7 +22,7 @@ func Convert(w http.ResponseWriter, r *http.Request) {
 		sendErrorResponse(w, http.StatusBadRequest, params, cType)
 	} else {
 		amountString, currency := params[0], params[1]
-		fixerStatus, latestRates := fixer.GetLatestRates(currency)
+		fixerStatus, latestRates := fixer.GetLatestRates(currency, r)
 		if !fixerStatus {
 			sendErrorResponse(w, http.StatusFailedDependency,
 				[]string{"Cannot GET to fixer.io."}, cType)
@@ -48,21 +51,20 @@ func unpackQuery(params url.Values) (bool, []string) {
 
 	if err != nil || !isProperCurr {
 		return false, []string{
-			"Is amount param correct: " +
-				strconv.FormatBool(err != nil),
-			"Is currency param correct: " +
-				strconv.FormatBool(isProperCurr)}
+			"Is amount param correct: " + strconv.FormatBool(err == nil),
+			"Is currency param correct: " + strconv.FormatBool(isProperCurr)}
 	}
 	return true, []string{amountString[0], currency[0]}
 }
 
 func isProperCurrency(currency string) bool {
-	currencies := []string{"AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "GBP", "HKD", "HRK",
+	currencies := []string{
+		"AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "GBP", "HKD", "HRK",
 		"HUF", "IDR", "ILS", "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP",
 		"PLN", "RON", "RUB", "SEK", "SGD", "THB", "TRY", "USD", "ZAR", "EUR"}
 
-	for i := range currencies {
-		if currency == currencies[i] {
+	for _, c := range currencies {
+		if currency == c {
 			return true
 		}
 	}

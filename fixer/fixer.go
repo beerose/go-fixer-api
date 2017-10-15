@@ -6,12 +6,17 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"google.golang.org/appengine"
+	"google.golang.org/appengine/urlfetch"
 )
 
 // GetLatestRates gets latest exchange rates from fixer.io
-func GetLatestRates(currency string) (bool, *Response) {
-	res, err := http.Get("http://api.fixer.io/latest?base=" + currency)
-	if res.StatusCode != 200 || err != nil {
+func GetLatestRates(currency string, r *http.Request) (bool, *Response) {
+	ctx := appengine.NewContext(r)
+	client := urlfetch.Client(ctx)
+	res, err := client.Get("http://api.fixer.io/latest?base=" + currency)
+	if err != nil || res.StatusCode != 200 {
 		return false, nil
 	}
 	body, err := ioutil.ReadAll(res.Body)

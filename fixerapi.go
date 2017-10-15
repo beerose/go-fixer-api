@@ -2,14 +2,16 @@ package fixerapi
 
 import (
 	"fixerapi/convert"
-	"log"
+	"fmt"
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
-func main() {
-	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/convert", convert.Convert)
-	log.Fatal(http.ListenAndServe(":8080", router))
+func init() {
+
+	fmt.Println("Started application.")
+
+	http.HandleFunc("/convert", convert.Convert)
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, r)
+	})
 }
