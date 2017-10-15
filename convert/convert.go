@@ -1,7 +1,7 @@
 package convert
 
 import (
-	"api/fixer"
+	"fixer-api/fixer"
 	"net/http"
 	"net/url"
 	"strconv"
