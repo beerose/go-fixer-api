@@ -2,7 +2,7 @@ package fixer
 
 import (
 	"encoding/json"
-	"fixer-api/currency"
+	"fixerapi/currency"
 	"fmt"
 	"io/ioutil"
 	"net/http"

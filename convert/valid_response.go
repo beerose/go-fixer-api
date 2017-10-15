@@ -1,7 +1,7 @@
 package convert
 
 import (
-	"fixer-api/currency"
+	"fixerapi/currency"
 	"net/http"
 )
 

@@ -1,7 +1,7 @@
-package fixer-api
+package fixerapi
 
 import (
-	"api/convert"
+	"fixerapi/convert"
 	"log"
 	"net/http"
 
