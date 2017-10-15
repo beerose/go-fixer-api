@@ -1,3 +1,4 @@
+application: fixer-api
 runtime: go
 env: flex
 api_version: go1
